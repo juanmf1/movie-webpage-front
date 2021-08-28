@@ -1,38 +1,299 @@
-.App {
-  text-align: center;
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700;800&family=Source+Sans+Pro:wght@200;300;400;700;900&display=swap");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
+
+/* font-family: 'Nunito', sans-serif;
+font-family: 'Source Sans Pro', sans-serif;
+Extra-light 200
+Light 300
+Regular 400
+Bold 700
+Black 900 */
+
+:root {
+  --color-primario: #282248;
+  --color-fondo: #18142f;
+  --color-botones: #443d68;
+  --color-botones-active: #383158;
+  --color-fuente: #ccc;
+  --color-fuente-active: #fff;
+  --color-iconos: #ad5ace;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 400;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+#root {
+  background-color: var(--color-primario);
+}
+
+
+/* Estilos Navbar */
+
+.navbar-custom {
+  background-color: var(--color-fondo);
+  z-index: 9999999999999;
+  box-shadow: 0px 5px 12px #111;    
+}
+
+.navbar-light .navbar-brand {
+  color: var(--color-fuente);
+}
+
+.navbar-light .navbar-brand:hover {
+  color: var(--color-fuente-active);
+}
+
+.navbar-light .navbar-nav .nav-link {
+  border-radius: 0.3rem;
+  font-weight: 600;
+  color: var(--color-fuente);
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+  background-color: var(--color-botones);
+  color: var(--color-fuente-active);
+}
+
+.search-bar {
+  background-color: var(--color-primario);
+  color: var(--color-fuente);
+  border: 1px solid var(--color-botones);
+}
+
+.search-bar:focus {
+  background-color: var(--color-primario);
+  color: var(--color-fuente);
+}
+
+/* Estilos Carousel */
+
+.carousel-principal div {
+  padding-left: 10%;
+}
+
+.img-fondo-carousel {
+  max-height: 40rem;
+  object-fit: cover;
+}
+
+.title-carousel,
+.description-carousel {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.637);
+  border-radius: 5px;
+  text-shadow: 3px 3px 5px #000;
+}
+
+.description-carousel {
+  width: 70%;
+}
+
+/* Estilos Cards Principales */
+
+.movie-card {
+  transition: 0.3s;
+  color: #fff;
+  box-shadow: 5px 5px 15px #111;
+  width: 14rem;
+}
+
+@media (max-width: 768px) {
+  .movie-card {
+    width: 10rem;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.movie-card:hover {
+  z-index: 1000;
+  transform: scale(1.03);
 }
 
-.App-link {
-  color: #61dafb;
+.card-body {
+  background-color: #443d68;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.genre-container span {
+  background-color: #443d68b9;
+  border-radius: 1rem;
+}
+
+/* | Efecto para que el titulo tenga puntos suspensivos ... | */
+
+.card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-tag-container p,
+.card-title-span {
+  border-radius: 1rem;
+  padding: 0.4rem;
+  text-decoration: none;
+  background-color: var(--color-botones-active);
+}
+
+.card-tag-container p:hover {
+  background-color: var(--color-botones-active);
+}
+
+/* Estilos section */
+
+.section-header {
+  color: var(--color-fuente);
+}
+
+.header-icon {
+  color: var(--color-iconos);
+}
+
+/* Estilos Swipers */
+
+.swiper-container {
+  margin-bottom: 3rem;
+}
+
+.swiper-button-next, .swiper-button-prev{
+  color:var(--color-iconos)!important;
+}
+
+/* Estilos Movie Detail */
+
+.movie-detail-info h2,
+.movie-detail-info p,
+.movie-detail-info .torrents-container,
+.torrents-container-mobile,
+.movie-detail-info span {
+  background-color: #443d68b9;
+  border-radius: 0.3rem;
+  color: var(--color-fuente);
+}
+
+.movie-detail-cover {
+  box-shadow: 5px 5px 15px #111;
+  border: 3px solid var(--color-botones);
+}
+
+.link-torrent {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 1.3rem;
+  border-radius: 3px;
+  transition: 0.2s;
+}
+
+.link-torrent:hover {
+  background: var(--color-primario);
+}
+
+.link-torrent:focus {
+  background: var(--color-primario);
+}
+
+.torrents-container {
+  max-width: 768px;
+}
+
+.torrents-container .download {
+  border-bottom: 2px solid var(--color-fuente);
+}
+
+.torrents-container-mobile .download {
+  border-bottom: 2px solid var(--color-fuente);
+}
+
+.torrent-magnet {
+  color: var(--color-fuente);
+}
+
+.torrent-magnet:hover {
+  color: var(--color-iconos);
+}
+
+/* Estilos Footer */
+
+.footer-container {
+  color: #fff;
+}
+
+@media (max-width: 1200px) {
+  .footer-container {
+    border-top: 2px solid var(--color-botones);
   }
-  to {
-    transform: rotate(360deg);
-  }
+}
+
+.footer-social i {
+  color: #fff;
+  font-size: 2.5rem;
+}
+
+.footer-right p {
+  display: inline;
+  font-family: "Nunito", sans-serif;
+  vertical-align: center;
+  font-weight: 300;
+  font-size: 1.4rem;
+}
+
+.bi-instagram:hover {
+  color: rgb(236, 109, 24);
+}
+
+.bi-facebook:hover {
+  color: rgb(43, 115, 248);
+}
+
+.bi-whatsapp:hover {
+  color: rgb(116, 241, 78);
+}
+
+.bi-github:hover {
+  color: rgb(132, 46, 243);
+}
+
+/* Estilos Shuffle */
+
+.shuffle-container {
+  border-radius:50px;
+  height: 40vh;
+  background: rgb(230, 62, 6);
+  background: linear-gradient(
+    132deg,
+    rgba(230, 62, 6, 1) 4%,
+    rgba(105, 229, 251, 1) 30%,
+    rgba(217, 108, 212, 1) 72%,
+    rgba(221, 210, 50, 1) 100%
+  );
+}
+
+/* Estilos Searchbox */
+
+
+.search-canvas{
+  position:absolute;
+  z-index:99999999999999;
+  background-color: #282248f5;
+  color: var(--color-fuente);
+}
+
+.header-canvas{
+  background-color: var(--color-fondo);
+}
+
+.header-canvas button{
+  color:#fff;
+}
+
+.query-link{
+  color:var(--color-fuente);
+}
+
+.query-link:hover{
+  background-color: #443d68b9;
+  border-radius: 0.3rem;
+  color: var(--color-fuente);
 }
