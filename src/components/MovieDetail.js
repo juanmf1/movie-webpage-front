@@ -3,18 +3,16 @@ import Container from "react-bootstrap/esm/Container";
 import { useParams } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import Button from "react-bootstrap/Button";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
 import Dropdown from "react-bootstrap/Dropdown";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnet } from "@fortawesome/free-solid-svg-icons";
+import Spinner from "react-bootstrap/Spinner";
 
-
-const MovieDetail = () => {
-  const [movie, setMovie] = useState([]);
+const MovieDetail = ({ user }) => {
+  const [movie, setMovie] = useState(null);
   const [torrents, setTorrents] = useState(<li></li>);
+  const [genres, setGenres] = useState([]);
+
   const { id } = useParams();
   const url = `https://yts.mx/api/v2/movie_details.json?movie_id=${id}`;
 
@@ -22,7 +20,27 @@ const MovieDetail = () => {
     async function data() {
       const res = await fetch(url);
       const json = await res.json();
+
+      // Bucle para mostrar todos los generos menos el último
+
+      let genres = [];
+
+      for (var i = 0; i < json.data.movie.genres.length - 1; i++) {
+        genres = [...genres, ` ${json.data.movie.genres[i]},`];
+      }
+
+      // Mostar el último género sin coma al final
+
+      let genreLast = json.data.movie.genres[json.data.movie.genres.length - 1];
+
+      setGenres(genres);
+
+      setGenres([...genres, ` ${genreLast}`]);
+
+      console.log(genres);
+
       setMovie(json.data.movie);
+
       // usar la data desde json acá | porque si lo uso desde movies me va a dar cannot read property of undefined
       //                             |
       const links = await json.data.movie.torrents.map((torrent) => (
@@ -72,193 +90,167 @@ const MovieDetail = () => {
     data();
   }, []);
 
-  const commentBookmark = (props) => (
-    <Tooltip id="bookmark-tooltip" {...props}>
-      Agregar a Favoritos
-    </Tooltip>
-  );
-
-  // { movies.length > 0 && (
-
-  //   const showGenres = () => {
-  //    let genres=[];
-  //    for (var i = 0; i < 2; i++) {
-  //      genres.push(`${movie.genres[i]}`);
-  //    }
-  //    console.log(genres);
-  //    return genres;
-  //  }
-  // )
-
-  // }
-
   return (
     <>
-      {/* MOBILE */}
+      {!movie ? (
+        <Container fluid className="w-100 vh-100 d-flex justify-content-center align-items-center ">
 
-            {/* Portada y fondo */}
-      <div
-        className="d-flex justify-content-center d-md-none"
-        style={{
-          backgroundImage: `url(${movie.background_image})`,
-          backgroundSize: "cover",
-        }}
-      >
-        <img
-          className="m-2 movie-detail-cover h-75"
-          src={movie.medium_cover_image}
-          alt="movie cover"
-        />
-      </div>
+        <Spinner animation="border" variant="warning" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+        </Container>
+      ) : (
+        <>
+          {/* MOBILE */}
 
-            {/* Informacion de la pelicula */}
-      <Container
-        fluid
-        className="movie-detail-container-mobile d-flex flex-column d-md-none d-xl-none p-3"
-      >
-        <div className="movie-detail-info mx-1 mt-3 d-flex flex-column align-items-start">
-          <div className="d-flex align-items-start">
-            <h2 className="p-2 me-2">{movie.title}</h2>
-            <Button variant="warning">
-              <i className="h2 bi bi-bookmark-heart"></i>
-            </Button>
+          {/* Portada y fondo */}
+          <div
+            className="d-flex justify-content-center d-md-none"
+            style={{
+              backgroundImage: `url(${movie.background_image})`,
+              backgroundSize: "cover",
+            }}
+          >
+            <img
+              className="m-2 movie-detail-cover h-75"
+              src={movie.medium_cover_image}
+              alt="movie cover"
+            />
           </div>
 
-          <p className="p-2 h4">
-            <u>Genres</u>: {movie.genres}
-          </p>
-          <p className="p-2 h4">
-            <u>Year</u>: {movie.year}
-          </p>
-        </div>
-        <div className="movie-detail-info mt-3 d-flex d-sm-none flex-column align-items-start">
-          <p className="p-2 h5 mb-3"> Description: {movie.description_full}</p>
-          <div className=" py-2 w-100">
-            <Dropdown>
-              <Dropdown.Toggle
-                className="w-100"
-                variant="warning"
-                id="dropdown-basic"
-              >
-                <i class=" ms-3 h4 bi bi-download"> Download</i>
-              </Dropdown.Toggle>
+          {/* Informacion de la pelicula */}
+          <Container
+            fluid
+            className="movie-detail-container-mobile d-flex flex-column d-md-none d-xl-none p-3"
+          >
+            <div className="movie-detail-info mx-1 mt-3 d-flex flex-column align-items-start">
+              <div className="d-flex align-items-start">
+                <h2 className="p-2 me-2">{movie.title}</h2>
+                {user && <i class="bookmark-sm bi bi-bookmark-heart"></i>}
+              </div>
 
-              <Dropdown.Menu variant="dark" className="w-100">
+              <p className="p-2 h4">
+                <u>Genres</u>: {genres}
+              </p>
+              <p className="p-2 h4">
+                <u>Year</u>: {movie.year}
+              </p>
+            </div>
+            <div className="movie-detail-info mt-3 d-flex d-sm-none flex-column align-items-start">
+              <p className="p-2 h5 mb-3">
+                {" "}
+                Description: {movie.description_full}
+              </p>
+              <div className=" py-2 w-100">
+                <Dropdown>
+                  <Dropdown.Toggle
+                    className="w-100"
+                    variant="warning"
+                    id="dropdown-basic"
+                  >
+                    <i class=" ms-3 h4 bi bi-download"> Download</i>
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu variant="dark" className="w-100">
+                    {torrents}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            </div>
+          </Container>
+
+          {/* MEDIUM */}
+
+          {/* Portada, Fondo, Titulo, Año y Generos MEDIUM*/}
+          <Container
+            fluid
+            className="movie-detail-container d-none d-md-flex d-xl-none p-3"
+            style={{
+              backgroundImage: `url(${movie.background_image})`,
+              backgroundSize: "cover",
+            }}
+          >
+            {user && <i class="bookmark-md bi bi-bookmark-heart"></i>}
+            <img
+              className="m-2 movie-detail-cover h-75"
+              src={movie.medium_cover_image}
+              alt="movie cover"
+            />
+            <div className="movie-detail-info mx-1 mt-3 d-flex flex-column align-items-start">
+              <div className="d-flex align-items-end">
+                <h2 className="p-2">{movie.title}</h2>
+              </div>
+              <p className="p-2 h4">
+                <u>Genres</u>: {genres}
+              </p>
+              <p className="p-2 h4">
+                <u>Year</u>: {movie.year}
+              </p>
+            </div>
+          </Container>
+
+          {/* Descripcion y Links MEDIUM */}
+          <Container
+            fluid
+            className="movie-detail-container-mobile d-none d-sm-flex d-xl-none flex-column p-3"
+          >
+            <div className="movie-detail-info mt-1 d-flex flex-column align-items-start">
+              <p className="p-2 h5 mb-3">
+                <b>
+                  <u>Description:</u>
+                </b>{" "}
+                <br />
+                {movie.description_full}
+              </p>
+              <div className="torrents-container-mobile py-2 w-100">
+                <div className="pb-2 download w-100">
+                  <i class=" ms-3 h4 bi bi-download"> Download</i>
+                </div>
                 {torrents}
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-        </div>
-      </Container>
-
-
-
-      {/* MEDIUM */}
-
-            {/* Portada, Fondo, Titulo, Año y Generos MEDIUM*/}
-      <Container
-        fluid
-        className="movie-detail-container d-none d-md-flex d-xl-none p-3"
-        style={{
-          backgroundImage: `url(${movie.background_image})`,
-          backgroundSize: "cover",
-        }}
-      >
-        <img
-          className="m-2 movie-detail-cover h-75"
-          src={movie.medium_cover_image}
-          alt="movie cover"
-        />
-        <div className="movie-detail-info mx-1 mt-3 d-flex flex-column align-items-start">
-          <div className="d-flex align-items-end">
-            <h2 className="p-2">{movie.title}</h2>
-            <OverlayTrigger
-              placement="right"
-              delay={{ show: 250, hide: 400 }}
-              overlay={commentBookmark}
-            >
-              <Button variant="warning" className="m-3 movie-detail-bookmark">
-                <i className="h3 bi bi-bookmark-heart"></i>
-              </Button>
-            </OverlayTrigger>
-          </div>
-          <p className="p-2 h4">
-            <u>Genres</u>: {movie.genres}
-          </p>
-          <p className="p-2 h4">
-            <u>Year</u>: {movie.year}
-          </p>
-        </div>
-      </Container>
-             
-            {/* Descripcion y Links MEDIUM */}
-      <Container
-        fluid
-        className="movie-detail-container-mobile d-none d-sm-flex d-xl-none flex-column p-3"
-      >
-        <div className="movie-detail-info mt-1 d-flex flex-column align-items-start">
-          <p className="p-2 h5 mb-3">
-            <b>
-              <u>Description:</u>
-            </b>{" "}
-            <br />
-            {movie.description_full}
-          </p>
-          <div className="torrents-container-mobile py-2 w-100">
-            <div className="pb-2 download w-100">
-              <i class=" ms-3 h4 bi bi-download"> Download</i>
+              </div>
             </div>
-            {torrents}
-          </div>
-        </div>
-      </Container>
+          </Container>
 
-      {/* XL */}
+          {/* XL */}
 
-            {/* Container único para toda la info */}
-      <Container
-        fluid
-        className="movie-detail-container d-none d-xl-flex p-3"
-        style={{
-          backgroundImage: `url(${movie.background_image})`,
-          backgroundSize: "cover",
-        }}
-      >
-        <div>
-          <img
-            className="m-2 movie-detail-cover"
-            src={movie.large_cover_image}
-            alt="movie cover"
-          />
-        </div>
-        <div className="movie-detail-info mx-4 mt-3 d-flex flex-column align-items-start">
-          <div className="d-flex align-items-end">
-            <h2 className="p-2">{movie.title}</h2>
-            <OverlayTrigger
-              placement="right"
-              delay={{ show: 250, hide: 400 }}
-              overlay={commentBookmark}
-            >
-              <Button variant="warning" className="m-3 movie-detail-bookmark">
-                <i className="h3 bi bi-bookmark-heart"></i>
-              </Button>
-            </OverlayTrigger>
-          </div>
-          <p className="p-2 h4">
-            <u>Genres</u>: {movie.genres}
-          </p>
-          <p className="p-2 h4">
-            <u>Year</u>: {movie.year}
-          </p>
-          <p className="p-2 h5">{movie.description_full}</p>
-          <div className="torrents-container py-2 w-100">
-            <div className="pb-2 download w-100">
-              <i class=" ms-3 h4 bi bi-download"> Download</i>
+          {/* Container único para toda la info */}
+          <Container
+            fluid
+            className="movie-detail-container d-none d-xl-flex p-3"
+            style={{
+              backgroundImage: `url(${movie.background_image})`,
+              backgroundSize: "cover",
+            }}
+          >
+            <div>
+              {user && <i class="bookmark-xl bi bi-bookmark-heart"></i>}
+              <img
+                className="m-2 movie-detail-cover"
+                src={movie.large_cover_image}
+                alt="movie cover"
+              />
             </div>
-            {torrents}
-          </div>
-        </div>
-      </Container>
+            <div className="movie-detail-info mx-4 mt-3 d-flex flex-column align-items-start">
+              <div className="d-flex align-items-center">
+                <h2 className="p-2">{movie.title}</h2>
+              </div>
+              <p className="p-2 h4">
+                <u>Genres</u>: {genres}
+              </p>
+              <p className="p-2 h4">
+                <u>Year</u>: {movie.year}
+              </p>
+              <p className="p-2 h5">{movie.description_full}</p>
+              <div className="torrents-container py-2 w-100">
+                <div className="pb-2 download w-100">
+                  <i class=" ms-3 h4 bi bi-download"> Download</i>
+                </div>
+                {torrents}
+              </div>
+            </div>
+          </Container>
+        </>
+      )}
     </>
   );
 };

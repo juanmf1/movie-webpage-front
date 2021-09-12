@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
 import Button from "react-bootstrap/Button";
-import Link from'react-router-dom/Link'
+import Link from "react-router-dom/Link";
+import Container from "react-bootstrap/Container";
+import Spinner from "react-bootstrap/Spinner";
 
 const CarouselPrincipal = () => {
-  const [moviesCarousel, setMoviesCarousel] = useState([]);
+  const [moviesCarousel, setMoviesCarousel] = useState(null);
   const urlQuery = "https://yts.mx/api/v2/movie_details.json?movie_id=";
 
   useEffect(() => {
@@ -27,39 +29,69 @@ const CarouselPrincipal = () => {
 
   return (
     <>
-      <Carousel 
-      controls={false}
-      fade 
-      className="mb-3 d-flex">
-        {moviesCarousel.map((movie) => (
-          <Carousel.Item className="carousel-principal">
-            <div
-              className="h-50 d-flex px-2 py-2"
-              style={{
-                backgroundImage: `url(${movie.background_image_original})`,
-                backgroundSize: "cover",
-              }}
-            >
-              <img
-                className="ms-lg-5 p-5 d-block img-caratula-carousel"
-                src={movie.medium_cover_image}
-                alt="caratula pelicula"
-              />
-              <div className="d-flex flex-column justify-content-center align-items-start">
-                <h3 className="h1 title-carousel p-2">{movie.title}</h3>
-                <p className="description-carousel d-none d-md-block px-3 py-2">
-                  {movie.description_intro}
-                </p>
-                <Link to={location=> `/movie/${movie.id}`}>
-                  <Button variant="warning" className="mt-2 px-5 py-3">
-                    Ver ahora
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </Carousel.Item>
-        ))}
-      </Carousel>
+      {!moviesCarousel ? (
+        <Container className="container-loading-carrousel w-100 d-flex justify-content-center align-items-center" fluid>
+          <Spinner animation="border" variant="warning" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </Container>
+      ) : (
+        <>
+          <Carousel controls={false} fade className="mb-3 d-flex">
+            {moviesCarousel.map((movie) => (
+              <Carousel.Item className="carousel-principal">
+                <div
+                  className="h-50 d-none d-md-flex px-2 py-2"
+                  style={{
+                    backgroundImage: `url(${movie.background_image_original})`,
+                    backgroundSize: "cover",
+                  }}
+                >
+                  <img
+                    className="ms-lg-5 p-5 d-block img-caratula-carousel"
+                    src={movie.medium_cover_image}
+                    alt="caratula pelicula"
+                  />
+                  <div className="d-flex flex-column justify-content-center align-items-start">
+                    <h3 className="h1 title-carousel p-2">{movie.title}</h3>
+                    <p className="description-carousel d-none d-md-block px-3 py-2">
+                      {movie.description_intro}
+                    </p>
+                    <Link to={`/movie/${movie.id}`}>
+                      <Button variant="warning" className="mt-2 px-5 py-3">
+                        Download now
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+
+                {/* MOBILE */}
+
+                <div
+                  className="back-mobile h-50 d-flex d-md-none p-5"
+                  style={{
+                    backgroundImage: `url(${movie.large_cover_image})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                >
+                  <div className="d-flex flex-column align-items-center">
+                    <h3 className="h1 title-carousel p-2">{movie.title}</h3>
+                    <p className="description-carousel px-3 py-2">
+                      {movie.description_intro}
+                    </p>
+                    <Link to={`/movie/${movie.id}`}>
+                      <Button variant="warning" className="mt-2 px-5 py-3">
+                        Download now
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </Carousel.Item>
+            ))}
+          </Carousel>
+        </>
+      )}
     </>
   );
 };

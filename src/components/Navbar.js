@@ -1,85 +1,125 @@
-import {useState, useEffect} from'react';
+import { useState, useEffect } from "react";
 
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Link from "react-router-dom/Link";
-import SearchCanvas from './SearchCanvas';
+import SearchCanvas from "./SearchCanvas";
+import Button from "react-bootstrap/Button";
+import LoginModal from "./LoginModal";
 
-const Navigationbar = () => {
+const Navigationbar = ({
+  user,
+  onLogout,
+  onShowLoginModal,
+  onShowSignupModal,
+  onShowEditUserModal,
+}) => {
+  // Busqueda
   const [query, setQuery] = useState(null);
 
-  const [showSearchCanvas, setShowSearchCanvas]=useState(null);
+  const [showSearchCanvas, setShowSearchCanvas] = useState(null);
 
-  const handleShowSearchCanvas = () =>{
+  const handleShowSearchCanvas = () => {
     setShowSearchCanvas(true);
-  }
+  };
 
-  const handleCloseSearchCanvas = () =>{
+  const handleCloseSearchCanvas = () => {
     setShowSearchCanvas(false);
-    setQuery(null)
-  }
+    setQuery(null);
+  };
 
   const handleQueryChange = (event) => {
     setQuery(event.target.value);
   };
 
-
   return (
     <>
-    <Navbar sticky="top" className="px-4 py-3 navbar-custom" expand="lg">
-      <Navbar.Brand className="item-navbar">
-        <Link to="/" className="text-white text-decoration-none">
-          Proyecto Final
-        </Link>
-      </Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="ms-auto">
-          <Nav.Link className="px-3" onClick={handleShowSearchCanvas} href="">
-            <i className="bi bi-search"></i>
-          </Nav.Link>
-          <Link className="text-decoration-none">
-            <Nav.Link className="" href="">
-              <i className="bi bi-shuffle me-1"></i> Aleatorio
-            </Nav.Link>
+      <Navbar
+        sticky="top"
+        variant="dark"
+        className="px-4 py-3 navbar-custom"
+        expand="lg"
+      >
+        <Navbar.Brand className="item-navbar">
+          <Link to="/" className="text-white text-decoration-none">
+            Proyecto Final
           </Link>
-          <Nav.Link className="" href="">
-            <i className="bi bi-bookmark-star-fill me-1"></i> Favoritos
-          </Nav.Link>
-          <Nav.Link href="">
-            <i className="bi bi-clock-fill me-1"></i> Historial
-          </Nav.Link>
+        </Navbar.Brand>
+        {user ? (
+          <>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse
+              className="justify-content-center"
+              id="basic-navbar-nav"
+            >
+              <Nav className="ms-auto align-items-center">
+                <Nav.Link
+                  className="px-3 d-none d-lg-block"
+                  onClick={handleShowSearchCanvas}
+                  href=""
+                >
+                  <i className="bi bi-search"></i>
+                </Nav.Link>
+                <Button
+                  className="w-100 mt-3 d-lg-none search-button"
+                  onClick={handleShowSearchCanvas}
+                >
+                  Search
+                </Button>
+                <Link className="text-decoration-none">
+                  <Nav.Link className="" href="">
+                    <i className="bi bi-shuffle me-1"></i> Aleatorio
+                  </Nav.Link>
+                </Link>
+                <Nav.Link className="" href="">
+                  <i className="bi bi-bookmark-star-fill me-1"></i> Favoritos
+                </Nav.Link>
+                <Nav.Link href="">
+                  <i className="bi bi-clock-fill me-1"></i> Historial
+                </Nav.Link>
+                <NavDropdown
+                  align="end"
+                  menuVariant="dark"
+                  title={user}
+                  id="basic-nav-dropdown"
+                >
+                  <NavDropdown.Item onClick={onShowEditUserModal}>
+                    Modify Information
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={onLogout}>
+                    Log Out
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
+            </Navbar.Collapse>
+          </>
+        ) : (
+          <div className="ms-auto">
+            <Button
+              onClick={onShowSignupModal}
+              variant="secondary"
+              className="me-2 px-3"
+            >
+              Sign up
+            </Button>
+            <Button
+              onClick={onShowLoginModal}
+              variant="warning"
+              className="me-2 px-3"
+            >
+              Log In
+            </Button>
+          </div>
+        )}
+      </Navbar>
 
-
-          <NavDropdown
-            align="end"
-            menuVariant="dark"
-            title="Usuario"
-            id="basic-nav-dropdown"
-          >
-            <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.2">
-              Another action
-            </NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="#action/3.4">
-              Separated link
-            </NavDropdown.Item>
-          </NavDropdown>
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
-
-    <SearchCanvas
-    show={showSearchCanvas}
-    close={handleCloseSearchCanvas}
-    query={query}
-    handleQueryChange={handleQueryChange}
-    
-    />
-
+      <SearchCanvas
+        show={showSearchCanvas}
+        close={handleCloseSearchCanvas}
+        query={query}
+        handleQueryChange={handleQueryChange}
+      />
     </>
   );
 };

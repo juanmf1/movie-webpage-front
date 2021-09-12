@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import "swiper/swiper-bundle.min.css";
 import "swiper/swiper.min.css";
 import MovieCard from "./MovieCard";
+import Container from "react-bootstrap/Container";
+import Spinner from "react-bootstrap/Spinner";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation } from "swiper";
 SwiperCore.use([Navigation]);
 
-
-const SwiperMovies = ({ mode }) => {
-  const [movies, setMovies] = useState([]);
+const SwiperMovies = ({ mode, user }) => {
+  const [movies, setMovies] = useState(null);
   let url = "";
   let header = "";
 
@@ -85,19 +86,31 @@ const SwiperMovies = ({ mode }) => {
           },
         }}
       >
-        {movies.map((movie) => (
-          <SwiperSlide>
-            <MovieCard
-              movieId={movie.id}
-              title={movie.title_english}
-              year={movie.year}
-              sum={movie.summary}
-              rating={movie.rating}
-              genre={movie.genres}
-              img={movie.medium_cover_image}
-            />
-          </SwiperSlide>
-        ))}
+        {!movies ? (
+          <Container
+            className="w-100 d-flex justify-content-center align-items-center"
+            fluid
+          >
+            <Spinner animation="grow" variant="warning"/>
+          </Container>
+        ) : (
+          <>
+            {movies.map((movie) => (
+              <SwiperSlide>
+                <MovieCard
+                  movieId={movie.id}
+                  title={movie.title_english}
+                  year={movie.year}
+                  sum={movie.summary}
+                  rating={movie.rating}
+                  genre={movie.genres}
+                  img={movie.medium_cover_image}
+                  user={user}
+                />
+              </SwiperSlide>
+            ))}
+          </>
+        )}
       </Swiper>
     </>
   );

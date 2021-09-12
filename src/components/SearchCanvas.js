@@ -2,14 +2,10 @@ import { useEffect, useState } from "react";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Form from "react-bootstrap/Form";
 import Link from "react-router-dom/Link";
-import Button from "react-bootstrap/Button";
-
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
 
 const SearchCanvas = ({ show, close, query, handleQueryChange }) => {
   const [results, setResults] = useState([]);
-  const [search, setSearch] = useState(null);
+  const [search, setSearch] = useState(false);
 
   useEffect(() => {
     fetch(
@@ -17,14 +13,9 @@ const SearchCanvas = ({ show, close, query, handleQueryChange }) => {
     )
       .then((res) => res.json())
       .then((data) => setResults(data.data.movies));
+    setSearch(false);
   }, [query]);
-  useEffect(() => {
-    fetch(
-      `https://yts.mx/api/v2/list_movies.json?query_term=${query}&order_by=desc`
-    )
-      .then((res) => res.json())
-      .then((data) => setResults(data.data.movies));
-  }, [search]);
+  
 
   return (
     <Offcanvas className="search-canvas" show={show} onHide={close}>
@@ -47,11 +38,13 @@ const SearchCanvas = ({ show, close, query, handleQueryChange }) => {
             <Link
               className="text-decoration-none"
               onClick={close}
-              to={(location) => `/movie/${movie.id}`}
+              to={`/movie/${movie.id}`}
             >
               <div className="d-flex align-items-center query-link my-2 p-2">
                 <img src={movie.small_cover_image} alt="movie-cover" />
-                <p className="ms-2 h5">{movie.title} ({movie.year})</p>
+                <p className="ms-2 h5">
+                  {movie.title} ({movie.year})
+                </p>
               </div>
             </Link>
           ))}
