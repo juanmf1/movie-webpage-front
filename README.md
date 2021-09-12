@@ -1,5 +1,7 @@
 # Movie Webpage
 
+![captura](./public/captura.png)
+
 I created this simple movie webpage as a final project for ComunidadIT full-stack web developing course. 
 
 
