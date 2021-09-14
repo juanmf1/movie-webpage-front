@@ -69,6 +69,7 @@ Black 900 */
 
 .nav-link{
   font-size:1.1rem;
+  color: var(--color-fuente);
 }
 
 .login-modal{
@@ -266,34 +267,6 @@ Black 900 */
   color: rgb(132, 46, 243);
 }
 
-/* Estilos Shuffle */
-
-.shuffle-container {
-  border-radius:50px;
-  height: 40vh;
-  background: rgb(230, 62, 6);
-  background: linear-gradient(
-    132deg,
-    rgba(230, 62, 6, 1) 4%,
-    rgba(105, 229, 251, 1) 30%,
-    rgba(217, 108, 212, 1) 72%,
-    rgba(221, 210, 50, 1) 100%
-  );
-  transition:0.1s;
-}
-
-.shuffle-container:hover{
-  filter: saturate(120%);
-  cursor: pointer;
-}
-
-.div-shuffle{
-  transition:.3s;
-}
-
-.shuffle-container:hover .div-shuffle{
-  transform: scale(1.3);
-}
 
 /* Estilos Searchbox */
 
@@ -350,7 +323,7 @@ Black 900 */
   position:absolute;
   color: var(--color-iconos);
   font-size:2.8rem;
-  z-index:9999;
+  z-index:1049;
   top:105px;
   left:460px;
   transition:.3s;
@@ -365,7 +338,7 @@ Black 900 */
   position:absolute;
   color: var(--color-iconos);
   font-size:2.8rem;
-  z-index:9999;
+  z-index:1049;
   top:94px;
   left:210px;
   transition:.3s;
@@ -379,7 +352,7 @@ Black 900 */
 .bookmark-sm{
   color: var(--color-iconos);
   font-size:2.2rem;
-  z-index:9999;
+  z-index:1049;
   transition:.3s;
 }
 

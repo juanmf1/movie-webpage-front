@@ -10,8 +10,11 @@ SwiperCore.use([Navigation]);
 
 const SwiperMovies = ({ mode, user }) => {
   const [movies, setMovies] = useState(null);
+
+
   let url = "";
   let header = "";
+
 
   if (mode === "like") {
     url = "https://yts.mx/api/v2/list_movies.json?limit=20&sort_by=like_count";
@@ -44,6 +47,7 @@ const SwiperMovies = ({ mode, user }) => {
       .then((response) => response.json())
       .then((data) => setMovies(data.data.movies));
   }, []);
+
 
   return (
     <>
@@ -91,7 +95,7 @@ const SwiperMovies = ({ mode, user }) => {
             className="w-100 d-flex justify-content-center align-items-center"
             fluid
           >
-            <Spinner animation="grow" variant="warning"/>
+            <Spinner className="m-5" animation="grow" variant="warning"/>
           </Container>
         ) : (
           <>

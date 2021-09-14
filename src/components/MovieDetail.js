@@ -12,9 +12,93 @@ const MovieDetail = ({ user }) => {
   const [movie, setMovie] = useState(null);
   const [torrents, setTorrents] = useState(<li></li>);
   const [genres, setGenres] = useState([]);
+  const [isFav, setIsFav] = useState(false);
 
   const { id } = useParams();
   const url = `https://yts.mx/api/v2/movie_details.json?movie_id=${id}`;
+  const urlFav = `http://localhost:8000/favoritos/${id}`;
+
+  useEffect(async () => {
+    const response = await fetch(urlFav, { credentials: "include" });
+    const data = await response.json();
+
+    if (data.message === "hay favorito") {
+      setIsFav(true);
+    } else {
+      setIsFav(false);
+    }
+  }, []);
+
+  const handleBookmarkClick = (event) => {
+    event.preventDefault();
+    if (isFav) {
+      fetch(urlFav, { method: "DELETE", credentials: "include" })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+      setIsFav(false);
+    } else {
+      fetch(urlFav, { method: "POST", credentials: "include" })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+      setIsFav(true);
+    }
+  };
+
+  let iconoFavSm;
+
+  if (isFav) {
+    iconoFavSm = (
+      <i
+        onClick={handleBookmarkClick}
+        className= "bookmark-sm ms-auto bi bi-bookmark-heart-fill"
+      ></i>
+    );
+  } else {
+    iconoFavSm = (
+      <i
+        onClick={handleBookmarkClick}
+        className= "bookmark-sm ms-auto bi bi-bookmark-heart"
+      ></i>
+    );
+  }
+
+  let iconoFavMd;
+
+  if (isFav) {
+    iconoFavMd = (
+      <i
+        onClick={handleBookmarkClick}
+        className= "bookmark-md ms-auto bi bi-bookmark-heart-fill"
+      ></i>
+    );
+  } else {
+    iconoFavMd = (
+      <i
+        onClick={handleBookmarkClick}
+        className= "bookmark-md ms-auto bi bi-bookmark-heart"
+      ></i>
+    );
+  }
+
+  let iconoFavXl;
+
+  if (isFav) {
+    iconoFavXl = (
+      <i
+        onClick={handleBookmarkClick}
+        className= "bookmark-xl ms-auto bi bi-bookmark-heart-fill"
+      ></i>
+    );
+  } else {
+    iconoFavXl = (
+      <i
+        onClick={handleBookmarkClick}
+        className= "bookmark-xl ms-auto bi bi-bookmark-heart"
+      ></i>
+    );
+  }
+
+  
 
   useEffect(() => {
     async function data() {
@@ -36,8 +120,6 @@ const MovieDetail = ({ user }) => {
       setGenres(genres);
 
       setGenres([...genres, ` ${genreLast}`]);
-
-      console.log(genres);
 
       setMovie(json.data.movie);
 
@@ -126,7 +208,7 @@ const MovieDetail = ({ user }) => {
             <div className="movie-detail-info mx-1 mt-3 d-flex flex-column align-items-start">
               <div className="d-flex align-items-start">
                 <h2 className="p-2 me-2">{movie.title}</h2>
-                {user && <i class="bookmark-sm bi bi-bookmark-heart"></i>}
+                {user && iconoFavSm}
               </div>
 
               <p className="p-2 h4">
@@ -141,10 +223,10 @@ const MovieDetail = ({ user }) => {
                 {" "}
                 Description: {movie.description_full}
               </p>
-              <div className=" py-2 w-100">
-                <Dropdown>
+              <div className="fixed-bottom w-100">
+                <Dropdown >
                   <Dropdown.Toggle
-                    className="w-100"
+                    className="w-100 py-3"
                     variant="warning"
                     id="dropdown-basic"
                   >
@@ -170,7 +252,7 @@ const MovieDetail = ({ user }) => {
               backgroundSize: "cover",
             }}
           >
-            {user && <i class="bookmark-md bi bi-bookmark-heart"></i>}
+            {user && iconoFavMd}
             <img
               className="m-2 movie-detail-cover h-75"
               src={movie.medium_cover_image}
@@ -223,7 +305,7 @@ const MovieDetail = ({ user }) => {
             }}
           >
             <div>
-              {user && <i class="bookmark-xl bi bi-bookmark-heart"></i>}
+              {user && iconoFavXl}
               <img
                 className="m-2 movie-detail-cover"
                 src={movie.large_cover_image}

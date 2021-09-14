@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 
 const Footer = () => {
   return (
-    <Container fluid className="p-4 footer-container d-flex flex-column flex-md-row justify-content-center align-items-center">
+    <Container fluid className="p-4 mb-5 mb-sm-0 footer-container d-flex flex-column flex-md-row justify-content-center align-items-center">
       <div className="footer-right m-2">
         <p>Juan Manuel Fernandez. 2021 |</p>
       </div>

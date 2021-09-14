@@ -6,7 +6,6 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Link from "react-router-dom/Link";
 import SearchCanvas from "./SearchCanvas";
 import Button from "react-bootstrap/Button";
-import LoginModal from "./LoginModal";
 
 const Navigationbar = ({
   user,
@@ -69,14 +68,13 @@ const Navigationbar = ({
                 </Button>
                 <Link className="text-decoration-none">
                   <Nav.Link className="" href="">
-                    <i className="bi bi-shuffle me-1"></i> Aleatorio
+                    <i className="bi bi-shuffle me-1"></i> Discover a new title
                   </Nav.Link>
                 </Link>
                 <Nav.Link className="" href="">
-                  <i className="bi bi-bookmark-star-fill me-1"></i> Favoritos
-                </Nav.Link>
-                <Nav.Link href="">
-                  <i className="bi bi-clock-fill me-1"></i> Historial
+                  <Link className="text-decoration-none nav-link" to="/bookmarks">
+                    <i className="bi bi-bookmark-star-fill me-1"></i> Bookmarks
+                  </Link>
                 </Nav.Link>
                 <NavDropdown
                   align="end"

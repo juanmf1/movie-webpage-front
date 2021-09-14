@@ -10,7 +10,7 @@ import SwiperMovies from "./components/SwiperMovies";
 import LoginModal from "./components/LoginModal";
 import SignupModal from "./components/SignupModal";
 import EditUserModal from "./components/EditUserModal";
-import Shuffle from "./components/Shuffle";
+import Bookmarks from "./components/Bookmarks";
 
 //Componentes ruteo
 import { BrowserRouter, Switch, Route } from "react-router-dom";
@@ -21,6 +21,7 @@ function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setSignupModal] = useState(false);
   const [showEditUserModal, setShowEditUserModal] = useState(false);
+  
 
   const handleShowLoginModal = () => {
     setShowLoginModal(true);
@@ -53,7 +54,8 @@ function App() {
   };
 
   const handleModifyUser = (name) =>{
-    setUser(name)
+    setUser(name);
+    handleCloseEditUserModal();
   }
 
   const handleLogout = () => {
@@ -115,6 +117,9 @@ function App() {
               <SwiperMovies user={user} mode="last" />
               <SwiperMovies user={user} mode="year" />
             </div>
+          </Route>
+          <Route path="/bookmarks">
+            <Bookmarks user={user}></Bookmarks>
           </Route>
           <Route path="/movie/:id">
             <MovieDetail user={user} />
