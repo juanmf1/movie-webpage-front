@@ -6,6 +6,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Link from "react-router-dom/Link";
 import SearchCanvas from "./SearchCanvas";
 import Button from "react-bootstrap/Button";
+import logo from "../images/movie.png";
 
 const Navigationbar = ({
   user,
@@ -42,8 +43,10 @@ const Navigationbar = ({
       >
         <Navbar.Brand className="item-navbar">
           <Link to="/" className="text-white text-decoration-none">
-            <img src ="../images/movie.png"/>
-            Proyecto Final
+            <div className="logo-div d-flex align-items-center">
+              <img className="mx-1 logo" src={logo} />
+              Proyecto Final
+            </div>
           </Link>
         </Navbar.Brand>
         {user ? (
@@ -73,7 +76,7 @@ const Navigationbar = ({
                   </Nav.Link>
                 </Link>
                 <Nav.Link className="" href="">
-                  <Link className="text-decoration-none" to="/bookmarks">
+                  <Link className="text-decoration-none nav-bookmark" to="/bookmarks">
                     <i className="bi bi-bookmark-star-fill me-1"></i> Bookmarks
                   </Link>
                 </Nav.Link>

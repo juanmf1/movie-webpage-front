@@ -37,6 +37,11 @@ Black 900 */
 
 /* Estilos Navbar */
 
+.logo{
+  width: 45px;
+  filter: invert(60%) sepia(53%) saturate(5788%) hue-rotate(246deg) brightness(86%) contrast(84%);
+}
+
 .navbar-custom {
   background-color: var(--color-fondo);
   z-index: 1050;
@@ -78,6 +83,14 @@ Black 900 */
 
 .signup-modal{
   z-index:1055;
+}
+
+.nav-bookmark{
+  color: #9795A1;
+}
+
+.nav-bookmark:hover{
+  color: #C5C4CB
 }
 
 
