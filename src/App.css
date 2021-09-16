@@ -319,6 +319,19 @@ Black 900 */
 
 /* Estilos bookmarks */
 
+.bookmark-container{
+  min-height:85vh;
+}
+
+.bookmark-cover{
+  border-radius:15px;
+  transition: .15s;
+}
+.bookmark-cover:hover{
+  transform:scale(1.1)
+}
+/* Estilos bookmarks buttons*/
+
 .bookmark-xl{
   position:absolute;
   color: var(--color-iconos);

@@ -42,6 +42,7 @@ const Navigationbar = ({
       >
         <Navbar.Brand className="item-navbar">
           <Link to="/" className="text-white text-decoration-none">
+            <img src ="../images/movie.png"/>
             Proyecto Final
           </Link>
         </Navbar.Brand>
@@ -72,7 +73,7 @@ const Navigationbar = ({
                   </Nav.Link>
                 </Link>
                 <Nav.Link className="" href="">
-                  <Link className="text-decoration-none nav-link" to="/bookmarks">
+                  <Link className="text-decoration-none" to="/bookmarks">
                     <i className="bi bi-bookmark-star-fill me-1"></i> Bookmarks
                   </Link>
                 </Nav.Link>

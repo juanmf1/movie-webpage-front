@@ -12,6 +12,7 @@ import SignupModal from "./components/SignupModal";
 import EditUserModal from "./components/EditUserModal";
 import Bookmarks from "./components/Bookmarks";
 
+
 //Componentes ruteo
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
@@ -118,11 +119,11 @@ function App() {
               <SwiperMovies user={user} mode="year" />
             </div>
           </Route>
-          <Route path="/bookmarks">
-            <Bookmarks user={user}></Bookmarks>
-          </Route>
           <Route path="/movie/:id">
             <MovieDetail user={user} />
+          </Route>
+          <Route path="/bookmarks">
+            <Bookmarks user={user} />
           </Route>
         </Switch>
         <Footer />

@@ -13,6 +13,8 @@ const MovieDetail = ({ user }) => {
   const [torrents, setTorrents] = useState(<li></li>);
   const [genres, setGenres] = useState([]);
   const [isFav, setIsFav] = useState(false);
+  const [movieName, setMovieName] =useState("movieName");
+  const [movieCover, setMovieCover] = useState("movieCover");
 
   const { id } = useParams();
   const url = `https://yts.mx/api/v2/movie_details.json?movie_id=${id}`;
@@ -37,7 +39,18 @@ const MovieDetail = ({ user }) => {
         .then((data) => console.log(data));
       setIsFav(false);
     } else {
-      fetch(urlFav, { method: "POST", credentials: "include" })
+
+      const movieData = { 
+        movieName,
+        movieCover
+      }
+
+      fetch(urlFav, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(movieData),
+        headers: { 'Content-Type': "application/json"}
+      })
         .then((response) => response.json())
         .then((data) => console.log(data));
       setIsFav(true);
@@ -50,14 +63,14 @@ const MovieDetail = ({ user }) => {
     iconoFavSm = (
       <i
         onClick={handleBookmarkClick}
-        className= "bookmark-sm ms-auto bi bi-bookmark-heart-fill"
+        className="bookmark-sm ms-auto bi bi-bookmark-heart-fill"
       ></i>
     );
   } else {
     iconoFavSm = (
       <i
         onClick={handleBookmarkClick}
-        className= "bookmark-sm ms-auto bi bi-bookmark-heart"
+        className="bookmark-sm ms-auto bi bi-bookmark-heart"
       ></i>
     );
   }
@@ -68,14 +81,14 @@ const MovieDetail = ({ user }) => {
     iconoFavMd = (
       <i
         onClick={handleBookmarkClick}
-        className= "bookmark-md ms-auto bi bi-bookmark-heart-fill"
+        className="bookmark-md ms-auto bi bi-bookmark-heart-fill"
       ></i>
     );
   } else {
     iconoFavMd = (
       <i
         onClick={handleBookmarkClick}
-        className= "bookmark-md ms-auto bi bi-bookmark-heart"
+        className="bookmark-md ms-auto bi bi-bookmark-heart"
       ></i>
     );
   }
@@ -86,24 +99,27 @@ const MovieDetail = ({ user }) => {
     iconoFavXl = (
       <i
         onClick={handleBookmarkClick}
-        className= "bookmark-xl ms-auto bi bi-bookmark-heart-fill"
+        className="bookmark-xl ms-auto bi bi-bookmark-heart-fill"
       ></i>
     );
   } else {
     iconoFavXl = (
       <i
         onClick={handleBookmarkClick}
-        className= "bookmark-xl ms-auto bi bi-bookmark-heart"
+        className="bookmark-xl ms-auto bi bi-bookmark-heart"
       ></i>
     );
   }
-
-  
 
   useEffect(() => {
     async function data() {
       const res = await fetch(url);
       const json = await res.json();
+
+      // Guardo el nombre y el cover para los favoritos
+
+      setMovieName(json.data.movie.title);
+      setMovieCover(json.data.movie.medium_cover_image);
 
       // Bucle para mostrar todos los generos menos el último
 
@@ -175,11 +191,13 @@ const MovieDetail = ({ user }) => {
   return (
     <>
       {!movie ? (
-        <Container fluid className="w-100 vh-100 d-flex justify-content-center align-items-center ">
-
-        <Spinner animation="border" variant="warning" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
+        <Container
+          fluid
+          className="w-100 vh-100 d-flex justify-content-center align-items-center "
+        >
+          <Spinner animation="border" variant="warning" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
         </Container>
       ) : (
         <>
@@ -224,7 +242,7 @@ const MovieDetail = ({ user }) => {
                 Description: {movie.description_full}
               </p>
               <div className="fixed-bottom w-100">
-                <Dropdown >
+                <Dropdown>
                   <Dropdown.Toggle
                     className="w-100 py-3"
                     variant="warning"

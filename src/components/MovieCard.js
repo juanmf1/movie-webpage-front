@@ -3,6 +3,8 @@ import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 const MovieCard = ({ movieId, title, year, rating, genre, img, user }) => {
   const [isFav, setIsFav] = useState(false);
+  const [movieName, setMovieName] = useState(title);
+  const [movieCover, setMovieCover] = useState(img);
 
   const urlFav = `http://localhost:8000/favoritos/${movieId}`;
 
@@ -25,7 +27,16 @@ const MovieCard = ({ movieId, title, year, rating, genre, img, user }) => {
         .then((data) => console.log(data));
       setIsFav(false);
     } else {
-      fetch(urlFav, { method: "POST", credentials: "include" })
+      const movieData = {
+        movieName,
+        movieCover,
+      };
+      fetch(urlFav, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(movieData),
+        headers: { "Content-Type": "application/json" },
+      })
         .then((response) => response.json())
         .then((data) => console.log(data));
       setIsFav(true);
